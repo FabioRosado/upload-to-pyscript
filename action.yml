@@ -8,6 +8,10 @@ inputs:
   project_id:
     description: 'The project id to upload the repository to.'
     required: true
+  api_domain:
+    description: 'The domain of the API endpoint. Defaults to "pyscript.com".'
+    required: false
+    default: 'pyscript.com'
 
 runs:
   using: 'composite'
@@ -24,7 +28,7 @@ runs:
     - name: Send to PyScript.com
       shell: bash
       run: |
-        response=$(curl -s -w "%{http_code}" -o response_body.txt -X POST "https://pyscript-dev.com/api/projects/${{ inputs.project_id }}/files?archive=true&overwrite=true" \
+        response=$(curl -s -w "%{http_code}" -o response_body.txt -X POST "https://${{ inputs.api_domain }}.com/api/projects/${{ inputs.project_id }}/files?archive=true&overwrite=true" \
         -H "Authorization: Bearer ${{ inputs.api_token }}" \
         -F "file=@archive.zip")
 

@@ -23,11 +23,9 @@ runs:
     - name: Send to PyScript.com
       shell: bash
       run: |
-        curl -X POST "https://pyscript-dev.com/api/projects/${{ inputs.project_id }}/files" \
+        curl -X POST "https://pyscript-dev.com/api/projects/${{ inputs.project_id }}/files?archive=true&overwrite=true" \
         -H "Authorization: Bearer ${{ inputs.api_token }}" \
         -F "file=@archive.zip" \
-        -F "archive=true" \
-        -F "overwrite=true"
 
 branding:
   icon: 'package'

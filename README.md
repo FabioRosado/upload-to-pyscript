@@ -29,3 +29,4 @@ jobs:
         with:
           api_token: ${{ secrets.PYSCRIPT_API_TOKEN }}
           projectid: '00000000-0000-0000-0000-000000000000'
+```

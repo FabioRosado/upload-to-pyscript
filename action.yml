@@ -18,14 +18,25 @@ runs:
     - name: Zip files
       uses: montudor/action-zip@v1
       with:
-        args: zip -r archive.zip .
+        # By default we are ignore ALL . folders in the repo
+        args: zip -r archive.zip . -x ".*/*"
 
     - name: Send to PyScript.com
       shell: bash
       run: |
-        curl -X POST "https://pyscript-dev.com/api/projects/${{ inputs.project_id }}/files?archive=true&overwrite=true" \
+        response=$(curl -s -w "%{http_code}" -o response_body.txt -X POST "https://pyscript-dev.com/api/projects/${{ inputs.project_id }}/files?archive=true&overwrite=true" \
         -H "Authorization: Bearer ${{ inputs.api_token }}" \
-        -F "file=@archive.zip" \
+        -F "file=@archive.zip")
+
+        # Check if the response status code is less than 300
+        if [ "$response" -ge 300 ]; then
+          echo "Error: Received HTTP status code $response"
+          echo "Response body:"
+          cat response_body.txt
+          exit 1
+        fi
+
+        echo "File uploaded successfully."
 
 branding:
   icon: 'package'
